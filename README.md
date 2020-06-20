@@ -85,6 +85,26 @@ Intersect implements Grid{
 }
 TrafficMap {
   Map<int[], Grid> grids_map; // (x,y) -> Grid
+  List<Car> cars;
 }
+```
+
+Set up the Map:
+
+```
+// create a square Map with side length l with grid connection
+t_map = New TrafficMap(int l); 
+```
+
+Change state of the Map:
+
+```
+t_map.setLightAt(int[], int state);
+```
+
+Run cars around the Map:
+
+```
+t_map.run_cars()
 ```
 
