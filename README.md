@@ -51,60 +51,41 @@ Effects:
 
 - There is only one possible route from one Enter Point, which would Exit in a finite number of steps. 
 
-### Objects
+### Structure Design
 
 Lets abstract the objects involved and their properties:
 
-```
-Car : speed, position
-Light : state
-OnewayRoad : a group of cars, start point, end point
-OpenEnd : a group of connecting Roads
-Intersection: a traffice light, a group of connecting Roads
-TrafficMap: a group of Intersections, a group of Roads
-```
-
-Structure to represent the traffic:
+Interface to the traffic:
 
 ```java
-Car { 
-  int speed; 
-  int location;
-  Grid start;
-  Grid end; 
+User { 
+  getSpeed();
+  getFromLoc();
+  getToloc();
+  getUntilLoc();
+  proceed(interval);
+  putSelfInMap(Loc);
+  removeSelfFromMap();
 }
-interface Grid {
-  List<int[]> from; // (x,y) there is a road from (x,y) to this
-  List<int[]> to; // (x,y) there is a road from this to (x,y)
+Map {
+  isOpenEnd(Loc);
+  isExit(Loc);
+  isEntry(Loc);
+  isInterSect(Loc);
+  isEdge(Loc, Loc);
+  getLengthEdge(Loc, Loc);
+  getAllDest(Loc);
+  getAllSource(Loc);
+  getAllRoute(Loc);
+  getLightStatus(Loc);
+  getLightStatus(Loc, Loc, Loc);
+  setLightStatus(Loc, Loc, Loc);
 }
-OpenEnd implements Grid{
-}
-Intersect implements Grid{
-  Map<int[], int> light; // (x1,y1,x2,y2) the choice's traffic light status
-  Map<int[], int[]> choice; // (x1, y1) -> (x2, y2) there is a lane available to let cars coming from (x1,y1) to turn to the lane toward (x2,y2)
-}
-TrafficMap {
-  Map<int[], Grid> grids_map; // (x,y) -> Grid
-  List<Car> cars;
+Traffic{
+  step(interval);
+  getAllTraffic();
+  getAllTraffic(Loc, Loc);
+  getAllTrafficTo(Loc);
+  getAllTrafficFrom(Loc);
 }
 ```
-
-Set up the Map:
-
-```
-// create a square Map with side length l with grid connection
-t_map = New TrafficMap(int l); 
-```
-
-Change state of the Map:
-
-```
-t_map.setLightAt(int[], int state);
-```
-
-Run cars around the Map:
-
-```
-t_map.run_cars()
-```
-
