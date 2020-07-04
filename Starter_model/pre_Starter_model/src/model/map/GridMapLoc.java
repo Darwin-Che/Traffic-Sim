@@ -12,7 +12,7 @@ public class GridMapLoc implements MapLoc {
 
 	private GridCross[][] allLight;
 
-	GridMapLoc(int xl, int yl) {
+	public GridMapLoc(int xl, int yl) {
 		xLimit = xl;
 		yLimit = yl;
 		allLight = new GridCross[xLimit + 1][yLimit + 1];

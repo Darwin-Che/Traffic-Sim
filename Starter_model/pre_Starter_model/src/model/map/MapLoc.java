@@ -2,8 +2,6 @@ package model.map;
 
 import java.util.List;
 
-import model.map.Light.LIGHT;
-
 public interface MapLoc {
 
 	boolean isOpenEnd(Loc loc);

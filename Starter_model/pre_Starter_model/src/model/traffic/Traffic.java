@@ -3,6 +3,7 @@ package model.traffic;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.map.GridMapLoc;
 import model.map.Loc;
 import model.map.MapLoc;
 import model.user.User;
@@ -11,6 +12,11 @@ public class Traffic {
 	
 	private MapLoc map;
 	private List<User> users; 
+	
+	public Traffic(int xl, int yl) {
+		map = new GridMapLoc(xl, yl);
+		users = new ArrayList<User>();
+	}
 	
 	void step(double interval) {
 
@@ -46,4 +52,6 @@ public class Traffic {
 		}
 		return ret;
 	}
+	
+	
 }
