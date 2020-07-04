@@ -1,4 +1,4 @@
-package gui;
+package model.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;

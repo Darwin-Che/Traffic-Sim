@@ -59,33 +59,58 @@ Interface to the traffic:
 
 ```java
 User { 
-  getSpeed();
-  getFromLoc();
-  getToloc();
-  getUntilLoc();
-  proceed(interval);
-  putSelfInMap(Loc);
-  removeSelfFromMap();
+	double getSpeed();
+	Loc getFromLoc();
+	Loc getToloc();
+	double getUntilLoc();
+	void proceed(double interval);
+	void putSelfInMap(MapLoc toMap, List<Loc> toWalk);
+	void removeSelfFromMap();
 }
-Map {
-  isOpenEnd(Loc);
-  isExit(Loc);
-  isEntry(Loc);
-  isInterSect(Loc);
-  isEdge(Loc, Loc);
-  getLengthEdge(Loc, Loc);
-  getAllDest(Loc);
-  getAllSource(Loc);
-  getAllRoute(Loc);
-  getLightStatus(Loc);
-  getLightStatus(Loc, Loc, Loc);
-  setLightStatus(Loc, Loc, Loc);
+InterSection {
+	List<Light> getAllLight();
+	void change();
+}
+Loc {
+	int xLoc;
+	int yLoc;
+
+	int getX()
+	int getY()
+	boolean equals(Object other)
+}
+Light {
+	enum LIGHT {
+		GREEN, YELLOW, RED
+	}
+	LIGHT lightStatus;
+
+	Light(LIGHT status)
+	LIGHT getStatus()
+	void setStatus(LIGHT status)
+}
+MapLoc {
+	boolean isOpenEnd(Loc loc);
+	boolean isExit(Loc loc);
+	boolean isEntry(Loc loc);
+	boolean isIntersect(Loc loc);
+	boolean isEdge(Loc loc1, Loc loc2);
+	double getLengthEdge(Loc loc1, Loc loc2);
+	List<Loc> getAllTo(Loc loc);
+	List<Loc> getAllFrom(Loc loc);
+	List<Loc[]> getAllRoute(Loc loc);
+	List<Light> getAllLight(Loc loc);
+	Light getLight(Loc locFrom, Loc locCur, Loc locTo);
+	void changeCorssStatus(Loc locCur);
 }
 Traffic{
-  step(interval);
-  getAllTraffic();
-  getAllTraffic(Loc, Loc);
-  getAllTrafficTo(Loc);
-  getAllTrafficFrom(Loc);
+	MapLoc map;
+	List<User> users; 
+	
+	void step(double interval)
+	List<User> getAllUsers()
+	List<User> getAllUsers(Loc locFrom, Loc locTo)
+	List<User> getAllUsersTo(Loc locTo)
+	List<User> getAllUsersFrom(Loc locFrom)
 }
 ```

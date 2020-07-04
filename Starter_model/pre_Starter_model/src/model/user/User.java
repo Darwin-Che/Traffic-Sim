@@ -1,6 +1,9 @@
-package user;
+package model.user;
 
-import map.Loc;
+import java.util.List;
+
+import model.map.Loc;
+import model.map.MapLoc;
 
 public interface User {
 	double getSpeed();
@@ -13,7 +16,7 @@ public interface User {
 
 	void proceed(double interval);
 	
-	void putSelfInMap(Loc loc);
+	void putSelfInMap(MapLoc toMap, List<Loc> toWalk);
 	
 	void removeSelfFromMap();
 }
