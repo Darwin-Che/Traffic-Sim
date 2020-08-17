@@ -20,12 +20,18 @@ public interface MapLoc {
 
 	List<Loc> getAllFrom(Loc loc);
 
+	List<Loc> getAllLoc();
+	
+	List<Loc[]> getAllRoute();
+
 	List<Loc[]> getAllRoute(Loc loc);
 
 	List<Light> getAllLight(Loc loc);
 
 	Light getLight(Loc locFrom, Loc locCur, Loc locTo);
 
-	void changeCorssStatus(Loc locCur);
+	void changeCrossStatus(Loc locCur);
+
+	public List<Loc> generateWalk(Loc start);
 
 }

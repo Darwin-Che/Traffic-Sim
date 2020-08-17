@@ -14,7 +14,7 @@ public interface User {
 
 	double getUntilLoc();
 
-	void proceed(double interval);
+	void proceed();
 	
 	void putSelfInMap(MapLoc toMap, List<Loc> toWalk);
 	

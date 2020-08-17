@@ -15,7 +15,7 @@ public class GridMapLoc implements MapLoc {
 	public GridMapLoc(int xl, int yl) {
 		xLimit = xl;
 		yLimit = yl;
-		allLight = new GridCross[xLimit + 1][yLimit + 1];
+		allLight = new GridCross[xLimit - 1][yLimit - 1];
 	}
 
 	@Override
@@ -104,6 +104,16 @@ public class GridMapLoc implements MapLoc {
 		return ret;
 	}
 
+	public List<Loc> getAllLoc() {
+		List<Loc> ret = new ArrayList<Loc>();
+		for (int i = 1; i < xLimit; i++) {
+			for (int j = 1; j < yLimit; j++) {
+				ret.add(new Loc(i,j));
+			}
+		}
+		return ret;
+	}
+	
 	@Override
 	public List<Loc[]> getAllRoute(Loc loc) {
 		// TODO Auto-generated method stub
@@ -122,8 +132,20 @@ public class GridMapLoc implements MapLoc {
 	}
 
 	@Override
+	public List<Loc[]> getAllRoute() {
+		// TODO Auto-generated method stub
+		List<Loc[]> ret = new ArrayList<Loc[]>();
+		for (int i = 1; i < xLimit; i++) {
+			for (int j = 1; j < yLimit; j++) {
+				ret.addAll(getAllRoute(new Loc(i,j)));
+			}
+		}
+		return ret;
+	}
+	
+	@Override
 	public List<Light> getAllLight(Loc loc) {
-		return allLight[loc.getX()][loc.getY()].getAllLight();
+		return allLight[loc.getX() - 1][loc.getY() - 1].getAllLight();
 	}
 
 	@Override
@@ -131,17 +153,30 @@ public class GridMapLoc implements MapLoc {
 		Loc[] r = { locFrom, locTo };
 		if (getAllRoute(locCur).contains(r)) {
 			if (locFrom.getX() == locCur.getX())
-				return allLight[locCur.getX()][locCur.getY()].getAllLight().get(1);
+				return getAllLight(locCur).get(1);
 			if (locFrom.getY() == locCur.getY())
-				return allLight[locCur.getX()][locCur.getY()].getAllLight().get(0);
+				return getAllLight(locCur).get(0);
 		}
 		return null;
 	}
 
 	@Override
-	public void changeCorssStatus(Loc locCur) {
-		allLight[locCur.getX()][locCur.getY()].change();
+	public void changeCrossStatus(Loc locCur) {
+		allLight[locCur.getX() - 1][locCur.getY() - 1].change();
 	}
+	
+	public List<Loc> generateWalk(Loc start) {
+		List<Loc> ret = new ArrayList<Loc>();
+		ret.add(start);
+		Loc tmp = start;
+		while(!(isExit(tmp))) {
+			List<Loc> next = getAllTo(tmp);
+			tmp = next.get((int) Math.random() * next.size());
+			ret.add(tmp);
+		}
+		return ret;
+	}
+
 
 }
 
