@@ -4,6 +4,10 @@
 
 Starter Model : https://app.lucidchart.com/invitations/accept/312b7d10-62e1-4811-a88f-d754d09b2b0a
 
+## Design Doc
+
+https://docs.google.com/document/d/1KKtY59eU5C85tMEEst1Ijqc1kdoLdJg2kOrxAL_WmVA/edit?usp=sharing
+
 ## Introduction
 
 What factors are involved in a traffic? 
