@@ -16,8 +16,8 @@ public class Traffic {
 
 	private int changeLight;
 
-	public Traffic(int xl, int yl) {
-		map = new GridMapLoc(xl, yl);
+	public Traffic(MapLoc tm) {
+		map = tm;
 		users = new ArrayList<User>();
 		changeLight = 0;
 	}

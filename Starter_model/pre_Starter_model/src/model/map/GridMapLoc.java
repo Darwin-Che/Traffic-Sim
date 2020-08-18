@@ -75,6 +75,11 @@ public class GridMapLoc implements MapLoc {
 	}
 
 	@Override
+	public Intersection getCross(Loc loc) {
+		return allLight[loc.getX()][loc.getY()];
+	}
+
+	@Override
 	public List<Loc> getAllTo(Loc loc) {
 		// TODO Auto-generated method stub
 		List<Loc> ret = new ArrayList<Loc>();
@@ -108,12 +113,12 @@ public class GridMapLoc implements MapLoc {
 		List<Loc> ret = new ArrayList<Loc>();
 		for (int i = 1; i < xLimit; i++) {
 			for (int j = 1; j < yLimit; j++) {
-				ret.add(new Loc(i,j));
+				ret.add(new Loc(i, j));
 			}
 		}
 		return ret;
 	}
-	
+
 	@Override
 	public List<Loc[]> getAllRoute(Loc loc) {
 		// TODO Auto-generated method stub
@@ -137,15 +142,26 @@ public class GridMapLoc implements MapLoc {
 		List<Loc[]> ret = new ArrayList<Loc[]>();
 		for (int i = 1; i < xLimit; i++) {
 			for (int j = 1; j < yLimit; j++) {
-				ret.addAll(getAllRoute(new Loc(i,j)));
+				ret.addAll(getAllRoute(new Loc(i, j)));
 			}
 		}
 		return ret;
 	}
-	
+
 	@Override
 	public List<Light> getAllLight(Loc loc) {
 		return allLight[loc.getX() - 1][loc.getY() - 1].getAllLight();
+	}
+
+	@Override
+	public List<Intersection> getAllCross() {
+		List<Intersection> ret = new ArrayList<Intersection>();
+		for (int i = 1; i < xLimit; i++) {
+			for (int j = 1; j < yLimit; j++) {
+				ret.add(allLight[i][j]);
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -164,19 +180,18 @@ public class GridMapLoc implements MapLoc {
 	public void changeCrossStatus(Loc locCur) {
 		allLight[locCur.getX() - 1][locCur.getY() - 1].change();
 	}
-	
+
 	public List<Loc> generateWalk(Loc start) {
 		List<Loc> ret = new ArrayList<Loc>();
 		ret.add(start);
 		Loc tmp = start;
-		while(!(isExit(tmp))) {
+		while (!(isExit(tmp))) {
 			List<Loc> next = getAllTo(tmp);
 			tmp = next.get((int) Math.random() * next.size());
 			ret.add(tmp);
 		}
 		return ret;
 	}
-
 
 }
 

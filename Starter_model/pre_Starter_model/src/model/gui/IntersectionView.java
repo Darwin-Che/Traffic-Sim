@@ -31,9 +31,6 @@ public class IntersectionView extends JButton {
 //
 //	private List<Integer> changedIndices;
 
-	private boolean hover;
-	private boolean click;
-
 //	private void calcArcs() throws Exception {
 //		List<Integer> dir = new ArrayList<Integer>();
 //

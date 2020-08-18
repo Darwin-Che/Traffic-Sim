@@ -15,6 +15,8 @@ public interface MapLoc {
 	boolean isEdge(Loc loc1, Loc loc2);
 
 	double getLengthEdge(Loc loc1, Loc loc2);
+	
+	public Intersection getCross(Loc loc);
 
 	List<Loc> getAllTo(Loc loc);
 
@@ -28,10 +30,13 @@ public interface MapLoc {
 
 	List<Light> getAllLight(Loc loc);
 
+	public List<Intersection> getAllCross();
+	
 	Light getLight(Loc locFrom, Loc locCur, Loc locTo);
 
 	void changeCrossStatus(Loc locCur);
 
 	public List<Loc> generateWalk(Loc start);
+	
 
 }
