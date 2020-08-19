@@ -67,15 +67,12 @@ public class IntersectionView extends JButton {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		// super.paintComponent(g);
 
-		Graphics2D g2d = (Graphics2D) g.create();
+		g.setColor(colorView);
 
-		g2d.setColor(colorView);
+		g.fillOval(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
 
-		g2d.drawOval(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
-
-		g2d.dispose();
 	}
 
 }

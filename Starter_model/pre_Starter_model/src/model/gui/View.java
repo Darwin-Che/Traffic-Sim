@@ -4,6 +4,7 @@ import model.map.*;
 import model.traffic.Traffic;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.*;
 
@@ -12,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 public class View {
+
+	private int xViewMap;
+	private int yViewMap;
 
 	private Traffic trafficData;
 
@@ -27,24 +31,69 @@ public class View {
 
 	private JPanel statePanel;
 
-	public View(Traffic tr) {
+	public View(Traffic tr, Dimension framedim) {
+		xViewMap = (int) (framedim.width * 0.7);
+		yViewMap = framedim.height;
+
 		trafficData = tr;
 
 		mapPanel = new JPanel();
+		mapPanel.setSize(xViewMap, yViewMap);
 
 		statePanel = new JPanel();
+		statePanel.setSize(framedim.width - xViewMap, yViewMap);
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapPanel, statePanel);
-		splitpane.setDividerLocation(0.7);
-		splitpane.setEnabled(false);
+		splitpane.setPreferredSize(framedim);
+		splitpane.setDividerLocation(xViewMap);
+		// splitpane.setEnabled(false);
 
 		frame = new JFrame("Traffic Simulator");
+		frame.setPreferredSize(framedim);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(splitpane);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+		addViewButtons();
+		drawIntersection(mapPanel.getGraphics());
+		drawRoad(mapPanel.getGraphics());
+
+		for (Loc k : locToView.keySet()) {
+			System.out.println(k);
+			System.out.println(locToView.get(k).getLocView());
+			System.out.println();
+		}
+
+	}
+
+	public void addViewButtons() {
+
+		List<IntersectionView> ivlst = new ArrayList<IntersectionView>();
+
+		List<Loc> allLoc = trafficData.map.getAllLoc();
+		int xRoadNum = 0, yRoadNum = 0;
+		for (Loc l : allLoc) {
+			if (l.getX() > xRoadNum)
+				xRoadNum = l.getX();
+			if (l.getY() > yRoadNum)
+				yRoadNum = l.getY();
+		}
+		int xRoadSpace = xViewMap / (2 + xRoadNum);
+		int yRoadSpace = yViewMap / (2 + yRoadNum);
+
+		for (Loc l : allLoc) {
+			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace),(int) ((1 + l.getY()) * yRoadSpace));
+			Color cx = ((l.getX() + l.getY()) % 2 == 0) ? Color.green : Color.red;
+			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
+			ivlst.add(iv);
+			mapPanel.add(iv);
+		}
+
+		loadView(ivlst);
+
+		System.out.println();
 	}
 
 	public void loadView(List<IntersectionView> ivlst) {
@@ -75,14 +124,18 @@ public class View {
 
 	public void drawIntersection(Graphics g) {
 		for (IntersectionView iv : locToView.values()) {
-			iv.update(g);
+			iv.paintComponent(g);
 		}
+
 	}
 
 	public void drawRoad(Graphics g) {
 		List<Loc[]> allroute = trafficData.map.getAllRoute();
 		for (Loc[] l : allroute) {
-			g.drawLine(l[1].getX(), l[1].getY(), l[2].getX(), l[2].getY());
+			System.out.println(l[0]);
+			System.out.println(l[1]);
+//			g.drawLine(locToView.get(l[0]).getLocView().getX(), locToView.get(l[0]).getLocView().getY(),
+//					locToView.get(l[1]).getLocView().getX(), locToView.get(l[1]).getLocView().getY());
 		}
 	}
 

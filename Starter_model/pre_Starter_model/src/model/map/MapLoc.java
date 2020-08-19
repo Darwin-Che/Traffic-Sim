@@ -1,42 +1,56 @@
 package model.map;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MapLoc {
 
-	boolean isOpenEnd(Loc loc);
-
-	boolean isExit(Loc loc);
-
-	boolean isEntry(Loc loc);
-
-	boolean isIntersect(Loc loc);
-
-	boolean isEdge(Loc loc1, Loc loc2);
-
-	double getLengthEdge(Loc loc1, Loc loc2);
+	/******** functions on Loc ************/
 	
-	public Intersection getCross(Loc loc);
+	public boolean isOpenEnd(Loc loc);
 
-	List<Loc> getAllTo(Loc loc);
+	public boolean isExit(Loc loc);
 
-	List<Loc> getAllFrom(Loc loc);
+	public boolean isEntry(Loc loc);
 
-	List<Loc> getAllLoc();
+	public boolean isIntersect(Loc loc);
+
+	public List<Loc> getAllLoc();
+
+	/******** functions on Edge ************/
 	
-	List<Loc[]> getAllRoute();
-
-	List<Loc[]> getAllRoute(Loc loc);
-
-	List<Light> getAllLight(Loc loc);
-
-	public List<Intersection> getAllCross();
+	public boolean existEdge(Loc loc1, Loc loc2);
 	
-	Light getLight(Loc locFrom, Loc locCur, Loc locTo);
+	public boolean existEdge(Loc loc1, Loc loc2, String id);
 
-	void changeCrossStatus(Loc locCur);
+	public List<Edge> getAllEdge(Loc loc1, Loc loc2);
 
-	public List<Loc> generateWalk(Loc start);
+	public List<Edge> getAllEdgeTo(Loc loc);
 	
+	public List<Edge> getAllEdgeFrom(Loc loc);
+	
+	/******** functions on Route - Light ************/
+	
+	public List<Route> getAllRoute(Loc loc);
+	
+	public Map<Route, Light> getAllLight(Loc loc);
+
+	public Light getLight(Route route);
+
+	public Light getLight(Loc from, Loc cur, Loc to);
+
+	/******** functions on Intersection ************/
+	// Do we really need them?
+//	public Intersection getCross(Loc loc);
+//
+//	public List<Intersection> getAllCross();
+
+	public void changeCrossStatus(Loc locCur);
+	
+//	public void changeCrossStatus(Intersection is);
+
+	/******** Others ************/
+	
+	public List<Edge> generateWalk(Loc start);
 
 }
