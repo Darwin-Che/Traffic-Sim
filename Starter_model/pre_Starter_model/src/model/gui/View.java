@@ -46,7 +46,7 @@ public class View {
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapPanel, statePanel);
 		splitpane.setPreferredSize(framedim);
 		splitpane.setDividerLocation(xViewMap);
-		// splitpane.setEnabled(false);
+		splitpane.setEnabled(false);
 
 		frame = new JFrame("Traffic Simulator");
 		frame.setPreferredSize(framedim);
@@ -58,7 +58,6 @@ public class View {
 		frame.setResizable(false);
 
 		addViewButtons();
-		drawIntersection(mapPanel.getGraphics());
 
 		for (Loc k : locToView.keySet()) {
 			System.out.println(k);
@@ -66,13 +65,11 @@ public class View {
 			System.out.println();
 		}
 
-		drawRoad(mapPanel.getGraphics());
+		redraw();
 
 	}
 
 	public void addViewButtons() {
-
-		List<IntersectionView> ivlst = new ArrayList<IntersectionView>();
 
 		List<Loc> allLoc = trafficData.map.getAllLoc();
 		int xRoadNum = 0, yRoadNum = 0;
@@ -85,6 +82,8 @@ public class View {
 		int xRoadSpace = xViewMap / (2 + xRoadNum);
 		int yRoadSpace = yViewMap / (2 + yRoadNum);
 
+		List<IntersectionView> ivlst = new ArrayList<IntersectionView>();
+
 		for (Loc l : allLoc) {
 			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace), (int) ((1 + l.getY()) * yRoadSpace));
 			Color cx = ((l.getX() + l.getY()) % 2 == 0) ? Color.green : Color.red;
@@ -92,8 +91,6 @@ public class View {
 			ivlst.add(iv);
 			mapPanel.add(iv);
 		}
-
-		loadView(ivlst);
 
 		List<IntersectionController> iclst = new ArrayList<IntersectionController>();
 
@@ -105,11 +102,9 @@ public class View {
 			}
 		}
 
+		loadView(ivlst);
 		loadCtrl(iclst);
-
 		addControl();
-
-		System.out.println();
 	}
 
 	public void loadView(List<IntersectionView> ivlst) {
@@ -127,8 +122,9 @@ public class View {
 	}
 
 	public void redraw() {
-		drawIntersection(mapPanel.getGraphics());
+		mapPanel.paint(mapPanel.getGraphics());;
 		drawRoad(mapPanel.getGraphics());
+		drawIntersection(mapPanel.getGraphics());
 		drawState(statePanel.getGraphics());
 	}
 
@@ -149,8 +145,9 @@ public class View {
 		List<Edge> allEdge = trafficData.map.getAllEdge();
 		g.setColor(Color.blue);
 		for (Edge edge : allEdge) {
-			g.drawLine(locToView.get(edge.getFrom()).getX(), locToView.get(edge.getFrom()).getY(),
-					locToView.get(edge.getTo()).getX(), locToView.get(edge.getTo()).getY());
+			g.drawLine(locToView.get(edge.getFrom()).getLocView().getX(),
+					locToView.get(edge.getFrom()).getLocView().getY(), locToView.get(edge.getTo()).getLocView().getX(),
+					locToView.get(edge.getTo()).getLocView().getY());
 		}
 	}
 

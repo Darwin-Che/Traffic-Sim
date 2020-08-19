@@ -22,7 +22,7 @@ public class IntersectionView extends JButton {
 
 	private Loc loc;
 	private Loc locView;
-	private int radiusView;
+	public double radiusView;
 	public Color colorView;
 
 //	private List<IntersectionView> neighbours;
@@ -47,7 +47,7 @@ public class IntersectionView extends JButton {
 //
 //	}
 
-	public IntersectionView(Loc tloc, Loc tlocView, int tradiusView, Color tcolorView) {
+	public IntersectionView(Loc tloc, Loc tlocView, double tradiusView, Color tcolorView) {
 		loc = tloc;
 		locView = tlocView;
 		radiusView = tradiusView;
@@ -61,7 +61,7 @@ public class IntersectionView extends JButton {
 	public Loc getLoc() {
 		return loc;
 	}
-//
+
 //	public void addNeighbour(IntersectionView e) {
 //		neighbours.add(e);
 //
@@ -71,14 +71,16 @@ public class IntersectionView extends JButton {
 	public void paintComponent(Graphics g) {
 		// super.paintComponent(g);
 		g.setColor(colorView);
-		
-		g.fillOval(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
+
+		g.fillOval((int) (locView.getX() - radiusView), (int) (locView.getY() - radiusView), (int) (2 * radiusView),
+				(int) (2 * radiusView));
 
 	}
-	
+
 	@Override
 	public boolean contains(int x, int y) {
-		Shape shape = new Ellipse2D.Float(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
+		Shape shape = new Ellipse2D.Float((int) (locView.getX() - radiusView), (int) (locView.getY() - radiusView),
+				(int) (2 * radiusView), (int) (2 * radiusView));
 		return shape.contains(x, y);
 	}
 
