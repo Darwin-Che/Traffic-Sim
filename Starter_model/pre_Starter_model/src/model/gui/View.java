@@ -130,10 +130,9 @@ public class View {
 	}
 
 	public void drawRoad(Graphics g) {
-		List<Loc[]> allroute = trafficData.map.getAllRoute();
-		for (Loc[] l : allroute) {
-			System.out.println(l[0]);
-			System.out.println(l[1]);
+		List<Edge> allEdge = trafficData.map.getAllEdge();
+		for (Edge edge : allEdge) {
+			System.out.println(edge);
 //			g.drawLine(locToView.get(l[0]).getLocView().getX(), locToView.get(l[0]).getLocView().getY(),
 //					locToView.get(l[1]).getLocView().getX(), locToView.get(l[1]).getLocView().getY());
 		}

@@ -51,6 +51,8 @@ public class GridMapLoc implements MapLoc {
 		List<Loc> ret = new ArrayList<Loc>();
 		for (int i = 0; i <= xLimit; i++) {
 			for (int j = 0; j <= yLimit; j++) {
+				if ((i == 0 || i == xLimit) && (j == 0 || j == yLimit))
+					continue;
 				ret.add(new Loc(i, j));
 			}
 		}
@@ -68,17 +70,17 @@ public class GridMapLoc implements MapLoc {
 		int y2 = loc2.getY();
 		// on the same column, make sure is not on border
 		if (x1 == x2 && x1 != 0 && x1 != xLimit) {
-			// if |y1-y2| == 1
-			if (y1 - y2 == 1)
-				ret = true;
+			// if y2-y1 == 1
+//			if (y1 - y2 == 1)
+//				ret = true;
 			if (y2 - y1 == 1)
 				ret = true;
 		}
 		// on the same row, make sure is not on border
 		if (y1 == y2 && y1 != 0 && y1 != yLimit) {
-			// if |x1-x2| == 1
-			if (x1 - x2 == 1)
-				ret = true;
+			// if x2-x1 == 1
+//			if (x1 - x2 == 1)
+//				ret = true;
 			if (x2 - x1 == 1)
 				ret = true;
 		}
@@ -88,6 +90,37 @@ public class GridMapLoc implements MapLoc {
 	@Override
 	public boolean existEdge(Loc loc1, Loc loc2, String id) {
 		return existEdge(loc1, loc2);
+	}
+
+	public List<Edge> getAllEdge() {
+		List<Edge> ret = new ArrayList<Edge>();
+		// add edge from start point
+		// upper border
+		for (int i = 1; i < xLimit; ++i) {
+			Loc from = new Loc(i, 0);
+			Loc to = new Loc(i, 1);
+			ret.add(new Edge("", from, to, 1));
+		}
+		// left border
+		for (int j = 1; j < yLimit; ++j) {
+			Loc from = new Loc(0, j);
+			Loc to = new Loc(1, j);
+			ret.add(new Edge("", from, to, 1));
+		}
+		// internal points
+		for (int i = 1; i < xLimit; ++i) {
+			for (int j = 1; j < yLimit; ++j) {
+				Loc from = new Loc(i, j);
+				// horizontal
+				Loc toh = new Loc(i + 1, j);
+				// vertical
+				Loc tov = new Loc(i, j + 1);
+				// add both
+				ret.add(new Edge("", from, toh, 1));
+				ret.add(new Edge("", from, tov, 1));
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -170,8 +203,31 @@ public class GridMapLoc implements MapLoc {
 	}
 
 	@Override
+	public List<Route> getRouteOut(Edge inEdge) {
+		List<Route> ret = new ArrayList<Route>();
+		List<Route> ans = getAllRoute(inEdge.getTo());
+		for (Route route : ans) {
+			if (route.getInEdge() == inEdge) {
+				ret.add(route);
+			}
+		}
+		return ret;
+	}
+
+	@Override
 	public Map<Route, Light> getAllLight(Loc loc) {
 		return allLight[loc.getX() - 1][loc.getY() - 1].getAllLight();
+	}
+
+	@Override
+	public Light getLight(Edge inEdge, Edge outEdge) {
+		Route route = null;
+		try {
+			route = new Route(inEdge, outEdge);
+		} catch (Exception e) {
+			System.err.println("getLight(Edge, Edge) : error constructing new Route");
+		}
+		return getLight(route);
 	}
 
 	@Override
@@ -212,10 +268,13 @@ public class GridMapLoc implements MapLoc {
 
 	public List<Edge> generateWalk(Loc start) {
 		List<Edge> ret = new ArrayList<Edge>();
-		Loc tmp = start;
-		while (!(isExit(tmp))) {
-			List<Edge> next = getAllEdgeFrom(tmp);
-			ret.add(next.get((int) Math.random() * next.size()));
+		List<Edge> next = getAllEdgeFrom(start);
+		List<Route> tmp = null;
+		// next should not be empty
+		ret.add(next.get((int) Math.random() * next.size()));
+		while (!(isExit(ret.get(ret.size() - 1).getTo()))) {
+			tmp = getRouteOut(ret.get(ret.size() - 1));
+			ret.add(tmp.get((int) Math.random() * tmp.size()).getOutEdge());
 		}
 		return ret;
 	}

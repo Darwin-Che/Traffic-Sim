@@ -5,13 +5,14 @@ import java.util.List;
 
 import model.map.Loc;
 import model.map.MapLoc;
+import model.map.Edge;
 import model.map.Light.LIGHT;
 
 public class Car implements User {
 
 	private MapLoc map;
 	private double speed;
-	private List<Loc> walk;
+	private List<Edge> walk;
 	private double untilLoc;
 
 //	public Car() {
@@ -30,37 +31,32 @@ public class Car implements User {
 
 	@Override
 	public double getSpeed() {
-		// TODO Auto-generated method stub
 		return speed;
 	}
 
 	@Override
-	public Loc getFromLoc() {
-		// TODO Auto-generated method stub
+	public Edge getFromEdge() {
 		return walk.get(0);
 	}
 
 	@Override
-	public Loc getToloc() {
-		// TODO Auto-generated method stub
+	public Edge getToEdge() {
 		return walk.get(1);
 	}
 
 	@Override
 	public double getUntilLoc() {
-		// TODO Auto-generated method stub
 		return untilLoc;
 	}
 
 	@Override
 	public void proceed() {
-		// TODO Auto-generated method stub
 		double progress = speed / 60;
 		double nextUntilLoc = untilLoc - progress;
 		if (nextUntilLoc <= 0) {
-			if (map.getLight(walk.get(0), walk.get(1), walk.get(2)).getStatus() == LIGHT.GREEN) {
+			if (map.getLight(walk.get(0), walk.get(1)).getStatus() == LIGHT.GREEN) {
 				walk = walk.subList(1, walk.size());
-				untilLoc = map.getLengthEdge(walk.get(0), walk.get(1)) + nextUntilLoc;
+				untilLoc = walk.get(0).getLength() + nextUntilLoc;
 			} else {
 				untilLoc = 0;
 			}
@@ -70,16 +66,14 @@ public class Car implements User {
 	}
 
 	@Override
-	public void putSelfInMap(MapLoc toMap, List<Loc> toWalk) {
-		// TODO Auto-generated method stub
+	public void putSelfInMap(MapLoc toMap, List<Edge> toWalk) {
 		map = toMap;
 		walk = toWalk;
-		untilLoc = map.getLengthEdge(walk.get(0), walk.get(1));
+		untilLoc = walk.get(0).getLength();
 	}
 
 	@Override
 	public void removeSelfFromMap() {
-		// TODO Auto-generated method stub
 		map = null;
 		walk = null;
 	}

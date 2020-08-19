@@ -2,21 +2,22 @@ package model.user;
 
 import java.util.List;
 
+import model.map.Edge;
 import model.map.Loc;
 import model.map.MapLoc;
 
 public interface User {
 	double getSpeed();
 
-	Loc getFromLoc();
+	Edge getFromEdge();
 
-	Loc getToloc();
+	Edge getToEdge();
 
 	double getUntilLoc();
 
 	void proceed();
 	
-	void putSelfInMap(MapLoc toMap, List<Loc> toWalk);
+	void putSelfInMap(MapLoc toMap, List<Edge> toWalk);
 	
 	void removeSelfFromMap();
 }

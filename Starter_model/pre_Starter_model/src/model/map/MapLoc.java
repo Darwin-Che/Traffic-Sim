@@ -23,6 +23,8 @@ public interface MapLoc {
 	
 	public boolean existEdge(Loc loc1, Loc loc2, String id);
 
+	public List<Edge> getAllEdge();
+	
 	public List<Edge> getAllEdge(Loc loc1, Loc loc2);
 
 	public List<Edge> getAllEdgeTo(Loc loc);
@@ -33,9 +35,13 @@ public interface MapLoc {
 	
 	public List<Route> getAllRoute(Loc loc);
 	
+	public List<Route> getRouteOut(Edge inEdge);
+	
 	public Map<Route, Light> getAllLight(Loc loc);
 
 	public Light getLight(Route route);
+	
+	public Light getLight(Edge inEdge, Edge outEdge);
 
 	public Light getLight(Loc from, Loc cur, Loc to);
 
