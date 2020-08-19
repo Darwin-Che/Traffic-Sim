@@ -55,16 +55,18 @@ public class View {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.setResizable(false);
 
 		addViewButtons();
 		drawIntersection(mapPanel.getGraphics());
-		drawRoad(mapPanel.getGraphics());
 
 		for (Loc k : locToView.keySet()) {
 			System.out.println(k);
 			System.out.println(locToView.get(k).getLocView());
 			System.out.println();
 		}
+
+		drawRoad(mapPanel.getGraphics());
 
 	}
 
@@ -84,7 +86,7 @@ public class View {
 		int yRoadSpace = yViewMap / (2 + yRoadNum);
 
 		for (Loc l : allLoc) {
-			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace),(int) ((1 + l.getY()) * yRoadSpace));
+			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace), (int) ((1 + l.getY()) * yRoadSpace));
 			Color cx = ((l.getX() + l.getY()) % 2 == 0) ? Color.green : Color.red;
 			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
 			ivlst.add(iv);
@@ -93,31 +95,45 @@ public class View {
 
 		loadView(ivlst);
 
+		List<IntersectionController> iclst = new ArrayList<IntersectionController>();
+
+		for (IntersectionView iv : ivlst) {
+			if (trafficData.map.isIntersect(iv.getLoc())) {
+				IntersectionController ic = new IntersectionController(iv.getLoc(), iv.getLocView(),
+						trafficData.map.getCross(iv.getLoc()), this, iv);
+				iclst.add(ic);
+			}
+		}
+
+		loadCtrl(iclst);
+
+		addControl();
+
 		System.out.println();
 	}
 
 	public void loadView(List<IntersectionView> ivlst) {
-		locToView = new HashMap<Loc, IntersectionView>();
+		locToView = new TreeMap<Loc, IntersectionView>();
 		for (IntersectionView iv : ivlst) {
 			locToView.put(iv.getLoc(), iv);
 		}
 	}
 
 	public void loadCtrl(List<IntersectionController> iclst) {
-		locToCtrl = new HashMap<Loc, IntersectionController>();
+		locToCtrl = new TreeMap<Loc, IntersectionController>();
 		for (IntersectionController ic : iclst) {
 			locToCtrl.put(ic.getLoc(), ic);
 		}
 	}
 
 	public void redraw() {
-		drawRoad(mapPanel.getGraphics());
 		drawIntersection(mapPanel.getGraphics());
+		drawRoad(mapPanel.getGraphics());
 		drawState(statePanel.getGraphics());
 	}
 
 	public void addControl() {
-		for (Loc k : locToView.keySet()) {
+		for (Loc k : locToCtrl.keySet()) {
 			locToView.get(k).addMouseListener(locToCtrl.get(k));
 		}
 	}
@@ -131,10 +147,10 @@ public class View {
 
 	public void drawRoad(Graphics g) {
 		List<Edge> allEdge = trafficData.map.getAllEdge();
+		g.setColor(Color.blue);
 		for (Edge edge : allEdge) {
-			System.out.println(edge);
-//			g.drawLine(locToView.get(l[0]).getLocView().getX(), locToView.get(l[0]).getLocView().getY(),
-//					locToView.get(l[1]).getLocView().getX(), locToView.get(l[1]).getLocView().getY());
+			g.drawLine(locToView.get(edge.getFrom()).getX(), locToView.get(edge.getFrom()).getY(),
+					locToView.get(edge.getTo()).getX(), locToView.get(edge.getTo()).getY());
 		}
 	}
 

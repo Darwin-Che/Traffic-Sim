@@ -18,6 +18,11 @@ public class GridMapLoc implements MapLoc {
 		xLimit = xl;
 		yLimit = yl;
 		allLight = new GridCross[xLimit - 1][yLimit - 1];
+		for (int i = 0; i < xLimit - 1; ++i) {
+			for (int j = 0; j < yLimit - 1; ++j) {
+				allLight[i][j] = new GridCross();
+			}
+		}
 	}
 
 	/********************** functions on Loc ***********************/
@@ -253,7 +258,9 @@ public class GridMapLoc implements MapLoc {
 	/******************** functions on Intersection **********************/
 	// Do we really need them?
 
-//	public Intersection getCross(Loc loc);
+	public Intersection getCross(Loc loc) {
+		return allLight[loc.getX() - 1][loc.getY() - 1];
+	}
 
 //	public List<Intersection> getAllCross();
 

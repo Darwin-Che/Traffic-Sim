@@ -1,5 +1,6 @@
 package model.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,11 +17,22 @@ public class IntersectionController implements MouseListener {
 
 	private Intersection is;
 
+	private IntersectionView iv;
+	
 	private View view;
 
+	IntersectionController(Loc loc, Loc locView, Intersection is, View view, IntersectionView iv) {
+		this.loc = loc;
+		this.locView = locView;
+		this.is = is;
+		this.view = view;
+		this.iv = iv;
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		System.out.println("Button " + loc + " was pressed.");
+		iv.colorView = Color.black;
 		is.change();
 		view.redraw();
 
@@ -41,7 +53,7 @@ public class IntersectionController implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

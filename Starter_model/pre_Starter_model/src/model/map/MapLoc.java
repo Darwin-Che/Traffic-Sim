@@ -47,7 +47,7 @@ public interface MapLoc {
 
 	/******** functions on Intersection ************/
 	// Do we really need them?
-//	public Intersection getCross(Loc loc);
+	public Intersection getCross(Loc loc);
 //
 //	public List<Intersection> getAllCross();
 

@@ -6,7 +6,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ public class IntersectionView extends JButton {
 	private Loc loc;
 	private Loc locView;
 	private int radiusView;
-	private Color colorView;
+	public Color colorView;
 
 //	private List<IntersectionView> neighbours;
 //
@@ -68,11 +70,16 @@ public class IntersectionView extends JButton {
 	@Override
 	public void paintComponent(Graphics g) {
 		// super.paintComponent(g);
-
 		g.setColor(colorView);
-
+		
 		g.fillOval(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
 
+	}
+	
+	@Override
+	public boolean contains(int x, int y) {
+		Shape shape = new Ellipse2D.Float(locView.getX() - radiusView, locView.getY() - radiusView, 2 * radiusView, 2 * radiusView);
+		return shape.contains(x, y);
 	}
 
 }

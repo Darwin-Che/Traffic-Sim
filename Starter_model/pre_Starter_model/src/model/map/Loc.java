@@ -1,6 +1,6 @@
 package model.map;
 
-public class Loc {
+public class Loc implements Comparable<Loc> {
 	private int xLoc;
 	private int yLoc;
 
@@ -9,6 +9,11 @@ public class Loc {
 		yLoc = y;
 	}
 
+	@Override
+	public int hashCode() {
+		return (xLoc << 9) | yLoc;
+	}
+	
 	public int getX() {
 		return xLoc;
 	}
@@ -22,11 +27,22 @@ public class Loc {
 			return false;
 
 		Loc otherLoc = (Loc) other;
-		return getX() == otherLoc.getX() && getX() == otherLoc.getX();
+		return getX() == otherLoc.getX() && getY() == otherLoc.getY();
 	}
 
-	public String toString()
-    {
-        return "(" + getX() + ", " + getY() + ")";
-    }
+	public String toString() {
+		return "(" + getX() + ", " + getY() + ")";
+	}
+
+	@Override
+	public int compareTo(Loc other) {
+		if (getX() < other.getX()) return -2;
+		if (getX() > other.getX()) return 2;
+		if (getX() == other.getX()) {
+			if (getY() < other.getY()) return -1;
+			if (getY() > other.getY()) return 1;
+			if (getY() == other.getY()) return 0;
+		}
+		return 0;
+	}
 }

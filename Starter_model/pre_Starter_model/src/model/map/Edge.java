@@ -36,7 +36,7 @@ public class Edge {
 			return false;
 
 		Edge otherEdge = (Edge) other;
-		return getFrom() == otherEdge.getFrom() && getTo() == otherEdge.getTo() && getID() == otherEdge.getID();
+		return getFrom() == otherEdge.getFrom() && getTo() == otherEdge.getTo() && getID().equals(otherEdge.getID());
 	}
 	
 	public String toString()
