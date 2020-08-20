@@ -42,9 +42,7 @@ public class IntersectionController implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		System.out.println("Button " + loc + " was pressed.");
-		if (iv.colorView == Color.green) iv.colorView = Color.red;
-		else if (iv.colorView == Color.red) iv.colorView = Color.green;
+		//System.out.println("Button " + loc + " was pressed.");
 		is.change();
 		view.redraw();
 
