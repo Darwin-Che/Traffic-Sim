@@ -86,7 +86,7 @@ public class View {
 
 		for (Loc l : allLoc) {
 			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace), (int) ((1 + l.getY()) * yRoadSpace));
-			Color cx = ((l.getX() + l.getY()) % 2 == 0) ? Color.green : Color.red;
+			Color cx = Color.CYAN;
 			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
 			ivlst.add(iv);
 			mapPanel.add(iv);
@@ -99,6 +99,7 @@ public class View {
 				IntersectionController ic = new IntersectionController(iv.getLoc(), iv.getLocView(),
 						trafficData.map.getCross(iv.getLoc()), this, iv);
 				iclst.add(ic);
+				iv.is = trafficData.map.getCross(iv.getLoc());
 			}
 		}
 
@@ -123,7 +124,6 @@ public class View {
 
 	public void redraw() {
 		mapPanel.paint(mapPanel.getGraphics());
-		;
 		drawRoad(mapPanel.getGraphics());
 		drawIntersection(mapPanel.getGraphics());
 		drawState(statePanel.getGraphics());
@@ -151,7 +151,8 @@ public class View {
 			int x2 = locToView.get(edge.getTo()).getLocView().getX();
 			int y2 = locToView.get(edge.getTo()).getLocView().getY();
 			g.drawLine(x1, y1, x2, y2);
-			g.drawString(Integer.toString(trafficData.getAllUsers(edge).size()) + "/30", (x1 + x2) / 2 - 10, (y1 + y2) / 2);
+			g.drawString(Integer.toString(trafficData.getAllUsers(edge).size()) + "/30", (x1 + x2) / 2 - 10,
+					(y1 + y2) / 2);
 		}
 	}
 

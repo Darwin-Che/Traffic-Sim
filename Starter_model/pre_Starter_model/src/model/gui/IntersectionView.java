@@ -16,6 +16,10 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import model.map.Loc;
+import model.map.Route;
+import model.map.Edge;
+import model.map.Intersection;
+import model.map.Light;
 import model.map.Light.LIGHT;
 
 public class IntersectionView extends JButton {
@@ -24,6 +28,7 @@ public class IntersectionView extends JButton {
 	private Loc locView;
 	public double radiusView;
 	public Color colorView;
+	public Intersection is;
 
 //	private List<IntersectionView> neighbours;
 //
@@ -52,6 +57,7 @@ public class IntersectionView extends JButton {
 		locView = tlocView;
 		radiusView = tradiusView;
 		colorView = tcolorView;
+		is = null;
 	}
 
 	public Loc getLocView() {
@@ -74,7 +80,27 @@ public class IntersectionView extends JButton {
 
 		g.fillOval((int) (locView.getX() - radiusView), (int) (locView.getY() - radiusView), (int) (2 * radiusView),
 				(int) (2 * radiusView));
-
+		
+		
+//		Map<Route, Light> tmp = is.getAllLight();
+//		// create horizontal route
+//		Route r = null;
+//		Loc left = new Loc(loc.getX() - 1, loc.getY());
+//		Loc right = new Loc(loc.getX() + 1, loc.getY());
+//		Edge e1 = new Edge("", left, loc, 1);
+//		Edge e2 = new Edge("", loc, right, 1);
+//		try {
+//			r = new Route(e1, e2);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		g.setColor(Color.green);
+//		if (tmp.get(r).getStatus() == Light.LIGHT.GREEN) {
+//			g.drawLine((int) (locView.getX() - radiusView), locView.getY(), (int) (locView.getX() + radiusView), locView.getY());
+//		} else {
+//			g.drawLine(locView.getX(), (int) (locView.getY() - radiusView), locView.getX(),(int) (locView.getY() + radiusView) );
+//		}
 	}
 
 	@Override
