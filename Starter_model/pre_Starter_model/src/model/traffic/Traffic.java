@@ -21,9 +21,13 @@ public class Traffic {
 	public int crowded;
 	public int allUserNum;
 
-	private int changeLight;
+	public int changeLight;
+	
+	public boolean paused;
+	public boolean step;
 
 	public Traffic(MapLoc tm) {
+		paused = true;
 		allUserNum = 150;
 		crowded = 30;
 		map = tm;
@@ -35,7 +39,14 @@ public class Traffic {
 		int i = 0;
 		outerloop:
 		while (true) {
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			System.out.println("Executing turn " + i);
+			if (paused) continue;
+			if (step) paused = true;
 			step();
 			int j = 0;
 			while (getAllUsers().size() < allUserNum) {
@@ -44,11 +55,6 @@ public class Traffic {
 			}
 			view.redraw();
 			++i;
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			for (Edge e : map.getAllEdge()) {
 				if (getAllUsers(e).size() > crowded) {
 					System.out.println(e + " has " + getAllUsers(e).size() + " users. You keep a clear traffic in " + i + " turns!");

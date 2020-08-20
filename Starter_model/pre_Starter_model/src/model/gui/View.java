@@ -6,8 +6,13 @@ import model.traffic.Traffic;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -30,6 +35,14 @@ public class View {
 	private JPanel mapPanel;
 
 	private JPanel statePanel;
+	private JSplitPane stateSplitPane;
+	private JPanel controlPanel;
+	private JPanel textPanel;
+
+	private GridBagConstraints statec;
+	private JButton step;
+	private JButton run;
+	private JButton pause;
 
 	public View(Traffic tr, Dimension framedim) {
 		xViewMap = (int) (framedim.width * 0.7);
@@ -40,8 +53,45 @@ public class View {
 		mapPanel = new JPanel();
 		mapPanel.setSize(xViewMap, yViewMap);
 
+		step = new JButton("step");
+		step.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				trafficData.paused = false;
+				trafficData.step = true;
+			}
+		});
+		run = new JButton("run");
+		run.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				trafficData.paused = false;
+				trafficData.step = false;
+			}
+		});
+		pause = new JButton("pause");
+		pause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				trafficData.paused = true;
+				trafficData.step = false;
+			}
+		});
+
+		controlPanel = new JPanel();
+		controlPanel.add(step);
+		controlPanel.add(run);
+		controlPanel.add(pause);
+
+		textPanel = new JPanel();
+
+		stateSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, controlPanel, textPanel);
+		stateSplitPane.setEnabled(false);
+
 		statePanel = new JPanel();
 		statePanel.setSize(framedim.width - xViewMap, yViewMap);
+
+		statePanel.add(stateSplitPane);
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapPanel, statePanel);
 		splitpane.setPreferredSize(framedim);
@@ -87,7 +137,8 @@ public class View {
 		for (Loc l : allLoc) {
 			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace), (int) ((1 + l.getY()) * yRoadSpace));
 			Color cx = Color.gray;
-			if (trafficData.map.isIntersect(l)) cx = Color.orange;
+			if (trafficData.map.isIntersect(l))
+				cx = Color.orange;
 			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
 			ivlst.add(iv);
 			mapPanel.add(iv);
@@ -113,6 +164,7 @@ public class View {
 		locToView = new TreeMap<Loc, IntersectionView>();
 		for (IntersectionView iv : ivlst) {
 			locToView.put(iv.getLoc(), iv);
+			mapPanel.add(iv);
 		}
 	}
 
