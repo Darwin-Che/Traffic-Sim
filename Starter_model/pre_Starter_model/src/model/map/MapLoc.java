@@ -16,6 +16,8 @@ public interface MapLoc {
 	public boolean isIntersect(Loc loc);
 
 	public List<Loc> getAllLoc();
+	
+	public List<Loc> getAllEntry();
 
 	/******** functions on Edge ************/
 	

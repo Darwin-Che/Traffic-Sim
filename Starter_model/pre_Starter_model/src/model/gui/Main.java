@@ -5,7 +5,9 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import model.map.Edge;
 import model.map.GridMapLoc;
+import model.map.Loc;
 import model.map.MapLoc;
 import model.traffic.Traffic;
 
@@ -15,6 +17,8 @@ public class Main {
 		MapLoc map = new GridMapLoc(5, 5);
 		Traffic traffic = new Traffic(map);
 		View view = new View(traffic, new Dimension(800, 500));
+		traffic.view = view;
+		traffic.run();
 	}
 
 }

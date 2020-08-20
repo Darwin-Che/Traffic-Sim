@@ -5,14 +5,14 @@ import java.util.List;
 
 import model.map.Loc;
 import model.map.MapLoc;
+import model.traffic.Traffic;
 import model.map.Edge;
 import model.map.Light.LIGHT;
 
 public class Car implements User {
-
-	private MapLoc map;
-	private double speed;
 	private List<Edge> walk;
+	public Traffic traffic;
+	private double speed;
 	private double untilLoc;
 
 //	public Car() {
@@ -23,7 +23,7 @@ public class Car implements User {
 //	}
 
 	public Car(double speed_t) {
-		map = null;
+		traffic = null;
 		speed = speed_t;
 		walk = null;
 		untilLoc = 0;
@@ -54,7 +54,11 @@ public class Car implements User {
 		double progress = speed / 60;
 		double nextUntilLoc = untilLoc - progress;
 		if (nextUntilLoc <= 0) {
-			if (map.getLight(walk.get(0), walk.get(1)).getStatus() == LIGHT.GREEN) {
+			if (walk.size() == 1) {
+				removeSelfFromMap();
+				return;
+			}
+			if (traffic.map.getLight(walk.get(0), walk.get(1)).getStatus() == LIGHT.GREEN) {
 				walk = walk.subList(1, walk.size());
 				untilLoc = walk.get(0).getLength() + nextUntilLoc;
 			} else {
@@ -66,16 +70,27 @@ public class Car implements User {
 	}
 
 	@Override
-	public void putSelfInMap(MapLoc toMap, List<Edge> toWalk) {
-		map = toMap;
-		walk = toWalk;
+	public void putSelfInMap(Traffic traffic, List<Edge> walk) {
+		this.traffic = traffic;
+		this.walk = walk;
 		untilLoc = walk.get(0).getLength();
 	}
 
 	@Override
 	public void removeSelfFromMap() {
-		map = null;
+		traffic = null;
 		walk = null;
 	}
 
+	@Override
+	public List<Edge> getWalk() {
+		return walk;
+	}
+	
+	@Override
+	public boolean isInTraffic() {
+		return traffic == null;
+	}
+
+	
 }

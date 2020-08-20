@@ -122,7 +122,8 @@ public class View {
 	}
 
 	public void redraw() {
-		mapPanel.paint(mapPanel.getGraphics());;
+		mapPanel.paint(mapPanel.getGraphics());
+		;
 		drawRoad(mapPanel.getGraphics());
 		drawIntersection(mapPanel.getGraphics());
 		drawState(statePanel.getGraphics());
@@ -143,11 +144,14 @@ public class View {
 
 	public void drawRoad(Graphics g) {
 		List<Edge> allEdge = trafficData.map.getAllEdge();
-		g.setColor(Color.blue);
+		g.setColor(Color.black);
 		for (Edge edge : allEdge) {
-			g.drawLine(locToView.get(edge.getFrom()).getLocView().getX(),
-					locToView.get(edge.getFrom()).getLocView().getY(), locToView.get(edge.getTo()).getLocView().getX(),
-					locToView.get(edge.getTo()).getLocView().getY());
+			int x1 = locToView.get(edge.getFrom()).getLocView().getX();
+			int y1 = locToView.get(edge.getFrom()).getLocView().getY();
+			int x2 = locToView.get(edge.getTo()).getLocView().getX();
+			int y2 = locToView.get(edge.getTo()).getLocView().getY();
+			g.drawLine(x1, y1, x2, y2);
+			g.drawString(Integer.toString(trafficData.getAllUsers(edge).size()) + "/30", (x1 + x2) / 2 - 10, (y1 + y2) / 2);
 		}
 	}
 

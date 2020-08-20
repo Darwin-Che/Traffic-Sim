@@ -2,7 +2,9 @@ package model.traffic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import model.gui.View;
 import model.map.Edge;
 import model.map.GridMapLoc;
 import model.map.Loc;
@@ -14,68 +16,111 @@ public class Traffic {
 
 	public MapLoc map;
 	public List<User> users;
+	public View view;
+	
+	public int crowded;
+	public int allUserNum;
 
 	private int changeLight;
 
 	public Traffic(MapLoc tm) {
+		allUserNum = 150;
+		crowded = 30;
 		map = tm;
 		users = new ArrayList<User>();
 		changeLight = 0;
 	}
 
-	void step() {
-		if (changeLight % 30 == 0) {
-			changeMapLight();
-			changeLight = changeLight % 30 + 1;
-		}
-		for (User u : users) {
-			u.proceed();
+	public void run() {
+		int i = 0;
+		outerloop:
+		while (true) {
+			System.out.println("Executing turn " + i);
+			step();
+			int j = 0;
+			while (getAllUsers().size() < allUserNum) {
+				List<Loc> allEntry = map.getAllEntry();
+				addUser(allEntry.get((int) (Math.random() * allEntry.size())));
+			}
+			view.redraw();
+			++i;
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			for (Edge e : map.getAllEdge()) {
+				if (getAllUsers(e).size() > crowded) {
+					System.out.println(e + " has " + getAllUsers(e).size() + " users. You keep a clear traffic in " + i + " turns!");
+					break outerloop;
+				}
+			}
 		}
 	}
 
-	void addUser(Loc loc) {
+	public void step() {
+//		if (changeLight % 30 == 0) {
+//			changeMapLight();
+//			changeLight = changeLight % 30 + 1;
+//		}
+		System.out.println(users.size());
+		for (int i = 0; i < users.size();) {
+			users.get(i).proceed();
+			if (users.get(i).isInTraffic()) {
+				users.remove(i);
+				--i;
+			}
+			++i;
+		}
+	}
+
+	public void addUser(Loc loc) {
 		if (!(map.isEntry(loc)))
 			return;
 		List<Edge> walk = map.generateWalk(loc);
 		User u = new Car(30);
-		u.putSelfInMap(map, walk);
+		u.putSelfInMap(this, walk);
+		users.add(u);
+		for (Edge e : u.getWalk()) {
+			System.out.println(e);
+		}
 	}
 
-	List<User> getAllUsers() {
+	public List<User> getAllUsers() {
 		return users;
 	}
 
-	List<User> getAllUsers(Loc locFrom, Loc locTo) {
+	public List<User> getAllUsers(Loc locFrom, Loc locTo) {
 		List<User> ret = new ArrayList<User>();
 		for (User u : users) {
-			if (u.getFromEdge().getFrom() == locFrom && u.getFromEdge().getTo() == locTo)
+			if (u.getFromEdge().getFrom().equals(locFrom) && u.getFromEdge().getTo().equals(locTo))
 				ret.add(u);
 		}
 		return ret;
 	}
 
-	List<User> getAllUsers(Edge edge) {
+	public List<User> getAllUsers(Edge edge) {
 		List<User> ret = new ArrayList<User>();
 		for (User u : users) {
-			if (u.getFromEdge() == edge)
+			if (u.getFromEdge().equals(edge))
 				ret.add(u);
 		}
 		return ret;
 	}
 
-	List<User> getAllUsersTo(Loc locTo) {
+	public List<User> getAllUsersTo(Loc locTo) {
 		List<User> ret = new ArrayList<User>();
 		for (User u : users) {
-			if (u.getFromEdge().getTo() == locTo)
+			if (u.getFromEdge().getTo().equals(locTo))
 				ret.add(u);
 		}
 		return ret;
 	}
 
-	List<User> getAllUsersFrom(Loc locFrom) {
+	public List<User> getAllUsersFrom(Loc locFrom) {
 		List<User> ret = new ArrayList<User>();
 		for (User u : users) {
-			if (u.getFromEdge().getFrom() == locFrom)
+			if (u.getFromEdge().getFrom().equals(locFrom))
 				ret.add(u);
 		}
 		return ret;
@@ -83,6 +128,10 @@ public class Traffic {
 
 	void changeMapLight() {
 
+	}
+
+	public void removeUser(User u) {
+		users.remove(u);
 	}
 
 }

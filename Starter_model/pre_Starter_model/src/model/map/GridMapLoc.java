@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import model.map.Light.LIGHT;
 
@@ -20,7 +21,7 @@ public class GridMapLoc implements MapLoc {
 		allLight = new GridCross[xLimit - 1][yLimit - 1];
 		for (int i = 0; i < xLimit - 1; ++i) {
 			for (int j = 0; j < yLimit - 1; ++j) {
-				allLight[i][j] = new GridCross();
+				allLight[i][j] = new GridCross(new Loc(i + 1, j + 1));
 			}
 		}
 	}
@@ -63,7 +64,19 @@ public class GridMapLoc implements MapLoc {
 		}
 		return ret;
 	}
-
+	
+	@Override
+	public List<Loc> getAllEntry() {
+		List<Loc> ret = new ArrayList<Loc>();
+		for (int i = 1; i < xLimit; ++i) {
+			ret.add(new Loc(i,0));
+		}
+		for (int j = 1; j < yLimit; ++j) {
+			ret.add(new Loc(0,j));
+		}
+		return ret;
+	}
+	
 	/************************ functions on Edge **************************/
 
 	@Override
@@ -212,7 +225,7 @@ public class GridMapLoc implements MapLoc {
 		List<Route> ret = new ArrayList<Route>();
 		List<Route> ans = getAllRoute(inEdge.getTo());
 		for (Route route : ans) {
-			if (route.getInEdge() == inEdge) {
+			if (route.getInEdge().equals(inEdge)) {
 				ret.add(route);
 			}
 		}
@@ -275,12 +288,14 @@ public class GridMapLoc implements MapLoc {
 
 	public List<Edge> generateWalk(Loc start) {
 		List<Edge> ret = new ArrayList<Edge>();
-		List<Edge> next = getAllEdgeFrom(start);
+		List<Edge> next = getAllEdgeTo(start);
 		List<Route> tmp = null;
 		// next should not be empty
-		ret.add(next.get((int) Math.random() * next.size()));
+		ret.add(next.get((int) (Math.random() * next.size())));
 		while (!(isExit(ret.get(ret.size() - 1).getTo()))) {
+//			System.out.println(ret.get(ret.size() - 1));
 			tmp = getRouteOut(ret.get(ret.size() - 1));
+//			System.out.println(tmp);
 			ret.add(tmp.get((int) Math.random() * tmp.size()).getOutEdge());
 		}
 		return ret;
@@ -295,19 +310,21 @@ class GridCross implements Intersection {
 	private Light horizontal;
 	private Light vertical;
 
-	GridCross(LIGHT hori, LIGHT vert) {
+	GridCross(Loc loc, LIGHT hori, LIGHT vert) {
+		this.loc = loc;
 		horizontal = new Light(hori);
 		vertical = new Light(vert);
 	}
 
-	GridCross() {
+	GridCross(Loc loc) {
+		this.loc = loc;
 		horizontal = new Light(LIGHT.GREEN);
 		vertical = new Light(LIGHT.RED);
 	}
 
 	@Override
 	public Map<Route, Light> getAllLight() {
-		Map<Route, Light> ret = new HashMap<Route, Light>();
+		Map<Route, Light> ret = new TreeMap<Route, Light>();
 		try {
 			{
 				// horizontal
