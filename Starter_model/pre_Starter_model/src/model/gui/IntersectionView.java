@@ -81,26 +81,27 @@ public class IntersectionView extends JButton {
 		g.fillOval((int) (locView.getX() - radiusView), (int) (locView.getY() - radiusView), (int) (2 * radiusView),
 				(int) (2 * radiusView));
 		
+		if (is == null) return;
+		Map<Route, Light> tmp = is.getAllLight();
+		if (tmp.isEmpty()) return;
+		// create horizontal route
+		Route r = null;
+		Loc left = new Loc(loc.getX() - 1, loc.getY());
+		Loc right = new Loc(loc.getX() + 1, loc.getY());
+		Edge e1 = new Edge("", left, loc, 1);
+		Edge e2 = new Edge("", loc, right, 1);
+		try {
+			r = new Route(e1, e2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-//		Map<Route, Light> tmp = is.getAllLight();
-//		// create horizontal route
-//		Route r = null;
-//		Loc left = new Loc(loc.getX() - 1, loc.getY());
-//		Loc right = new Loc(loc.getX() + 1, loc.getY());
-//		Edge e1 = new Edge("", left, loc, 1);
-//		Edge e2 = new Edge("", loc, right, 1);
-//		try {
-//			r = new Route(e1, e2);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		g.setColor(Color.green);
-//		if (tmp.get(r).getStatus() == Light.LIGHT.GREEN) {
-//			g.drawLine((int) (locView.getX() - radiusView), locView.getY(), (int) (locView.getX() + radiusView), locView.getY());
-//		} else {
-//			g.drawLine(locView.getX(), (int) (locView.getY() - radiusView), locView.getX(),(int) (locView.getY() + radiusView) );
-//		}
+		g.setColor(Color.green);
+		if (tmp.get(r).getStatus() == Light.LIGHT.GREEN) {
+			g.drawLine((int) (locView.getX() - radiusView), locView.getY(), (int) (locView.getX() + radiusView), locView.getY());
+		} else {
+			g.drawLine(locView.getX(), (int) (locView.getY() - radiusView), locView.getX(),(int) (locView.getY() + radiusView) );
+		}
 	}
 
 	@Override

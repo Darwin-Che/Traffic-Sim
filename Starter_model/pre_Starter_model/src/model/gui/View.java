@@ -86,7 +86,8 @@ public class View {
 
 		for (Loc l : allLoc) {
 			Loc vloc = new Loc((int) ((1 + l.getX()) * xRoadSpace), (int) ((1 + l.getY()) * yRoadSpace));
-			Color cx = Color.CYAN;
+			Color cx = Color.gray;
+			if (trafficData.map.isIntersect(l)) cx = Color.orange;
 			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
 			ivlst.add(iv);
 			mapPanel.add(iv);
