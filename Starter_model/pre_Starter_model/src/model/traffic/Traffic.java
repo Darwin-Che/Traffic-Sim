@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import model.gui.View;
 import model.gui.ViewInterface;
 import model.map.Edge;
 import model.map.GridMapLoc;
@@ -40,7 +39,7 @@ public class Traffic {
 		int i = 0;
 		outerloop: while (true) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(800);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -94,7 +93,7 @@ public class Traffic {
 		if (!(map.isEntry(loc)))
 			return;
 		List<Edge> walk = map.generateWalk(loc);
-		User u = new Car(30);
+		User u = new Car(20);
 		u.putSelfInMap(this, walk);
 		users.add(u);
 		for (Edge e : u.getWalk()) {
