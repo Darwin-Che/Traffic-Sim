@@ -39,7 +39,6 @@ public class View {
 	private JPanel controlPanel;
 	private JPanel textPanel;
 
-	private GridBagConstraints statec;
 	private JButton step;
 	private JButton run;
 	private JButton pause;
@@ -52,6 +51,7 @@ public class View {
 
 		mapPanel = new JPanel();
 		mapPanel.setSize(xViewMap, yViewMap);
+		mapPanel.setLayout(null);
 
 		step = new JButton("step");
 		step.addActionListener(new ActionListener() {
@@ -105,17 +105,17 @@ public class View {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.setResizable(false);
+		frame.setResizable(true);
 
 		addViewButtons();
-
-		for (Loc k : locToView.keySet()) {
-			System.out.println(k);
-			System.out.println(locToView.get(k).getLocView());
-			System.out.println();
-		}
-
-		redraw();
+//
+//		for (Loc k : locToView.keySet()) {
+//			System.out.println(k);
+//			System.out.println(locToView.get(k).getLocView());
+//			System.out.println();
+//		}
+//
+//		redraw();
 
 	}
 
@@ -140,6 +140,7 @@ public class View {
 			if (trafficData.map.isIntersect(l))
 				cx = Color.orange;
 			IntersectionView iv = new IntersectionView(l, vloc, (xRoadSpace + yRoadSpace) / 10, cx);
+			iv.setToolTipText(iv.getLoc().toString());
 			ivlst.add(iv);
 			mapPanel.add(iv);
 		}
@@ -155,62 +156,61 @@ public class View {
 			}
 		}
 
-		loadView(ivlst);
-		loadCtrl(iclst);
-		addControl();
+//		loadView(ivlst);
+//		loadCtrl(iclst);
+//		addControl();
 	}
 
 	public void loadView(List<IntersectionView> ivlst) {
-		locToView = new TreeMap<Loc, IntersectionView>();
-		for (IntersectionView iv : ivlst) {
-			locToView.put(iv.getLoc(), iv);
-			mapPanel.add(iv);
-		}
+//		locToView = new TreeMap<Loc, IntersectionView>();
+//		for (IntersectionView iv : ivlst) {
+//			locToView.put(iv.getLoc(), iv);
+//			mapPanel.add(iv);
+//		}
 	}
 
 	public void loadCtrl(List<IntersectionController> iclst) {
-		locToCtrl = new TreeMap<Loc, IntersectionController>();
-		for (IntersectionController ic : iclst) {
-			locToCtrl.put(ic.getLoc(), ic);
-		}
+//		locToCtrl = new TreeMap<Loc, IntersectionController>();
+//		for (IntersectionController ic : iclst) {
+//			locToCtrl.put(ic.getLoc(), ic);
+//		}
 	}
 
 	public void redraw() {
-		mapPanel.paint(mapPanel.getGraphics());
-		drawRoad(mapPanel.getGraphics());
-		drawIntersection(mapPanel.getGraphics());
-		drawState(statePanel.getGraphics());
+//		mapPanel.paint(mapPanel.getGraphics());
+//		drawRoad(mapPanel.getGraphics());
+//		drawIntersection(mapPanel.getGraphics());
+//		drawState(statePanel.getGraphics());
 	}
 
 	public void addControl() {
-		for (Loc k : locToCtrl.keySet()) {
-			locToView.get(k).addMouseListener(locToCtrl.get(k));
-		}
+//		for (Loc k : locToCtrl.keySet()) {
+//			locToView.get(k).addMouseListener(locToCtrl.get(k));
+//		}
 	}
 
 	public void drawIntersection(Graphics g) {
-		for (IntersectionView iv : locToView.values()) {
-			iv.paintComponent(g);
-		}
+//		for (IntersectionView iv : locToView.values()) {
+//			iv.paintComponent(g);
+//		}
 
 	}
 
 	public void drawRoad(Graphics g) {
-		List<Edge> allEdge = trafficData.map.getAllEdge();
-		g.setColor(Color.black);
-		for (Edge edge : allEdge) {
-			int x1 = locToView.get(edge.getFrom()).getLocView().getX();
-			int y1 = locToView.get(edge.getFrom()).getLocView().getY();
-			int x2 = locToView.get(edge.getTo()).getLocView().getX();
-			int y2 = locToView.get(edge.getTo()).getLocView().getY();
-			g.drawLine(x1, y1, x2, y2);
-			g.drawString(Integer.toString(trafficData.getAllUsers(edge).size()) + "/30", (x1 + x2) / 2 - 10,
-					(y1 + y2) / 2);
-		}
+//		List<Edge> allEdge = trafficData.map.getAllEdge();
+//		g.setColor(Color.black);
+//		for (Edge edge : allEdge) {
+//			int x1 = locToView.get(edge.getFrom()).getLocView().getX();
+//			int y1 = locToView.get(edge.getFrom()).getLocView().getY();
+//			int x2 = locToView.get(edge.getTo()).getLocView().getX();
+//			int y2 = locToView.get(edge.getTo()).getLocView().getY();
+//			g.drawLine(x1, y1, x2, y2);
+//			g.drawString(Integer.toString(trafficData.getAllUsers(edge).size()) + "/30", (x1 + x2) / 2 - 10,
+//					(y1 + y2) / 2);
+//		}
 	}
 
 	public void drawState(Graphics g) {
-
 	}
 
 }

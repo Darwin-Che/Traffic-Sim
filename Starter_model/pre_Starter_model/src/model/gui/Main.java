@@ -18,7 +18,7 @@ public class Main {
 		Traffic traffic = new Traffic(map);
 		View view = new View(traffic, new Dimension(800, 500));
 		traffic.view = view;
-		traffic.run();
+//		traffic.run();
 	}
 
 }

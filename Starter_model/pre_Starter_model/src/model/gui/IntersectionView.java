@@ -102,6 +102,7 @@ public class IntersectionView extends JButton {
 		} else {
 			g.drawLine(locView.getX(), (int) (locView.getY() - radiusView), locView.getX(),(int) (locView.getY() + radiusView) );
 		}
+		super.paintComponent(g);
 	}
 
 	@Override

@@ -30,25 +30,21 @@ public class GridMapLoc implements MapLoc {
 
 	@Override
 	public boolean isOpenEnd(Loc loc) {
-		// TODO Auto-generated method stub
 		return loc.getX() == 0 || loc.getX() == xLimit || loc.getY() == 0 || loc.getY() == yLimit;
 	}
 
 	@Override
 	public boolean isEntry(Loc loc) {
-		// TODO Auto-generated method stub
 		return loc.getX() == 0 || loc.getY() == 0;
 	}
 
 	@Override
 	public boolean isExit(Loc loc) {
-		// TODO Auto-generated method stub
 		return loc.getX() == xLimit || loc.getY() == yLimit;
 	}
 
 	@Override
 	public boolean isIntersect(Loc loc) {
-		// TODO Auto-generated method stub
 		return !isOpenEnd(loc);
 	}
 
