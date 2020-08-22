@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import model.gui.View;
+import model.gui.ViewInterface;
 import model.map.Edge;
 import model.map.GridMapLoc;
 import model.map.Loc;
@@ -16,13 +17,13 @@ public class Traffic {
 
 	public MapLoc map;
 	public List<User> users;
-	public View view;
-	
+	public ViewInterface view;
+
 	public int crowded;
 	public int allUserNum;
 
 	public int changeLight;
-	
+
 	public boolean paused;
 	public boolean step;
 
@@ -37,27 +38,36 @@ public class Traffic {
 
 	public void run() {
 		int i = 0;
-		outerloop:
-		while (true) {
+		outerloop: while (true) {
 			try {
-				TimeUnit.SECONDS.sleep(1);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			System.out.println("Executing turn " + i);
-			if (paused) continue;
-			if (step) paused = true;
+			if (paused)
+				continue;
+			if (step)
+				paused = true;
 			step();
 			int j = 0;
-			while (getAllUsers().size() < allUserNum) {
-				List<Loc> allEntry = map.getAllEntry();
-				addUser(allEntry.get((int) (Math.random() * allEntry.size())));
+			if (getAllUsers().size() < allUserNum) {
+				while (getAllUsers().size() < allUserNum) {
+					List<Loc> allEntry = map.getAllEntry();
+					addUser(allEntry.get((int) (Math.random() * allEntry.size())));
+				}
+			} else {
+				for (int k = 0; k < 5; ++k) {
+					List<Loc> allEntry = map.getAllEntry();
+					addUser(allEntry.get((int) (Math.random() * allEntry.size())));
+				}
 			}
 			view.redraw();
 			++i;
 			for (Edge e : map.getAllEdge()) {
 				if (getAllUsers(e).size() > crowded) {
-					System.out.println(e + " has " + getAllUsers(e).size() + " users. You keep a clear traffic in " + i + " turns!");
+					System.out.println(e + " has " + getAllUsers(e).size() + " users. You keep a clear traffic in " + i
+							+ " turns!");
 					break outerloop;
 				}
 			}
