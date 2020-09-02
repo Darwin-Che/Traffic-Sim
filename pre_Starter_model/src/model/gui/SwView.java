@@ -228,13 +228,13 @@ public class SwView implements ViewInterface {
 
 	public Line2D getEdgePanelLine(JPanel p1, JPanel p2) {
 		Rectangle r1 = p1.getBounds(), r2 = p2.getBounds();
-		System.out.println(r1);
+//		System.out.println(r1);
 		int w1 = (int) r1.getWidth(), h1 = (int) r1.getHeight();
 		int w2 = (int) r2.getWidth(), h2 = (int) r1.getHeight();
 		// positive button radius
 		int m1 = Math.min(w1, h1) / 4, m2 = Math.min(w2, h2) / 4;
-		System.out.println("Line");
-		System.out.println(m1);
+//		System.out.println("Line");
+//		System.out.println(m1);
 		// line segments coordinates
 		int cx1 = (int) r1.getCenterX(), cy1 = (int) r1.getCenterY();
 		int cx2 = (int) r2.getCenterX(), cy2 = (int) r2.getCenterY();
@@ -369,7 +369,7 @@ public class SwView implements ViewInterface {
 			g.drawLine((int) line.getX1(), (int) line.getY1(), (int) line.getX2(), (int) line.getY2());
 			((Graphics2D) g).setStroke(new BasicStroke(4.0F));
 			g.setColor(Color.red);
-			System.out.println(perc);
+//			System.out.println(perc);
 			if (perc != 0) {
 				g.drawLine((int) line.getX1(), (int) line.getY1(),
 						(int) (line.getX1() + perc * (line.getX2() - line.getX1())),
@@ -428,7 +428,7 @@ public class SwView implements ViewInterface {
 			super();
 			this.addComponentListener(new ComponentAdapter() {
 				public void componentResized(ComponentEvent ev) {
-					System.out.println("Yes");
+//					System.out.println("Yes");
 					MapPanel mp = (MapPanel) ev.getSource();
 					mp.remove(edges);
 					initEdges();
