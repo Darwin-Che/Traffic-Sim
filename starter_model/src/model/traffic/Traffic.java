@@ -24,10 +24,11 @@ public class Traffic {
 	public int changeLight;
 
 	public boolean paused;
-	public boolean step;
+	public int step;
 
 	public Traffic(MapLoc tm) {
 		paused = true;
+		step = 0;
 		allUserNum = 40;
 		crowded = 30;
 		map = tm;
@@ -72,9 +73,6 @@ public class Traffic {
 		User u = new Car(20);
 		u.putSelfInMap(this, walk);
 		users.add(u);
-		for (Edge e : u.getWalk()) {
-			System.out.println(e);
-		}
 	}
 
 	public List<User> getAllUsers() {

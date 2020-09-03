@@ -132,14 +132,20 @@ public class FXView extends Application implements ViewInterface {
 
 	public void driver() {
 		AnimationTimer timer = new AnimationTimer() {
+			int t = 0;
 			@Override
 			public void handle(long now) {
 				if (tr.paused)
 					return;
-				if (tr.step) {
+				if (tr.step != 0) {
+					System.out.println(t++);
 					tr.step();
-					tr.paused = true;
+					tr.step--;
+					if (tr.step == 0) {
+						tr.paused = true;
+					}
 				} else {
+					System.out.println(t++);
 					tr.step();
 				}
 			}
@@ -196,12 +202,12 @@ public class FXView extends Application implements ViewInterface {
 		Button run = new Button("Run");
 		run.setOnAction(event -> {
 			tr.paused = false;
-			tr.step = false;
+			tr.step = 0;
 		});
 		Button pause = new Button("Pause");
 		pause.setOnAction(event -> {
 			tr.paused = true;
-			tr.step = false;
+			tr.step = 0;
 		});
 
 		runhb2.getChildren().addAll(run, pause);
@@ -221,7 +227,7 @@ public class FXView extends Application implements ViewInterface {
 			try {
 				String s = numsteps.getText();
 				int n = Integer.parseInt(s);
-				tr.step = true;
+				tr.step = n;
 				tr.paused = false;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -326,7 +332,6 @@ public class FXView extends Application implements ViewInterface {
 
 			if (tr.map.isIntersect(loc)) {
 				b.setOnAction(event -> {
-					System.out.println(tr.map.getCross(loc).getAllLight());
 					tr.map.changeCrossStatus(loc);
 					this.lineUpdate();
 				});
@@ -419,7 +424,6 @@ public class FXView extends Application implements ViewInterface {
 			public boolean contains(Point2D p) {
 				double dist = pDistance(p.getX(), p.getY(), this.getStartX(), this.getStartY(), this.getEndX(),
 						this.getEndY());
-				System.out.println(dist);
 				return dist < 10;
 			}
 
