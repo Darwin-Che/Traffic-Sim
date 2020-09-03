@@ -127,7 +127,7 @@ public class FXView extends Application implements ViewInterface {
 				tr.step();
 			}
 		};
-		
+
 		timer.start();
 	}
 
@@ -233,7 +233,7 @@ public class FXView extends Application implements ViewInterface {
 
 	@Override
 	public void redraw(Traffic tr) {
-		for (Edge e: tr.map.getAllEdge()) {
+		for (Edge e : tr.map.getAllEdge()) {
 			edgeMap.get(e).edgeUpdate();
 		}
 	}
@@ -255,10 +255,9 @@ public class FXView extends Application implements ViewInterface {
 
 	public void drawEdges() {
 		for (Edge e : tr.map.getAllEdge()) {
-			System.out.println("Loading edge at " + e.toString());
 			FXEdge fxe = new FXEdge(e);
 			edgeMap.put(e, fxe);
-			edges.getChildren().add(fxe);
+			edges.getChildren().addAll(fxe.full, fxe.part);
 		}
 	}
 
@@ -289,6 +288,8 @@ public class FXView extends Application implements ViewInterface {
 			this.loc = loc;
 
 			this.l = new Line();
+			l.setStroke(Color.GREEN);
+			l.setStrokeWidth(3);
 
 			this.getChildren().addAll(b, l);
 
@@ -336,7 +337,11 @@ public class FXView extends Application implements ViewInterface {
 
 	}
 
-	class FXEdge extends Line {
+	class FXEdge {
+
+		Line full = new Line();
+		Line part = new Line();
+
 		Edge e;
 
 		FXEdge(Edge e) {
@@ -351,11 +356,26 @@ public class FXView extends Application implements ViewInterface {
 			NumberBinding endX = Bindings.add(v2.b.layoutXProperty(), Bindings.divide(v2.b.widthProperty(), 2));
 			NumberBinding endY = Bindings.add(v2.b.layoutYProperty(), Bindings.divide(v2.b.heightProperty(), 2));
 
-			this.startXProperty().bind(startX);
-			this.startYProperty().bind(startY);
-			this.endXProperty().bind(endX);
-			this.endYProperty().bind(endY);
-
+			if (startX.getValue().doubleValue() == endX.getValue().doubleValue()) {
+				startY = Bindings.add(startY, Bindings.divide(v1.b.heightProperty(), 2));
+				endY = Bindings.subtract(endY, Bindings.divide(v2.b.heightProperty(), 2));
+			} else {
+				startX = Bindings.add(startX, Bindings.divide(v1.b.widthProperty(), 2));
+				endX = Bindings.subtract(endX, Bindings.divide(v2.b.widthProperty(), 2));
+			}
+			
+			full.startXProperty().bind(startX);
+			full.startYProperty().bind(startY);
+			full.endXProperty().bind(endX);
+			full.endYProperty().bind(endY);
+			full.setStroke(Color.LIGHTBLUE);
+			full.setStrokeWidth(3);
+			
+			part.setStroke(Color.RED);
+			part.setStrokeWidth(3);
+			part.startXProperty().bind(full.startXProperty());
+			part.startYProperty().bind(full.startYProperty());
+			
 			edgeUpdate();
 		}
 
@@ -364,18 +384,14 @@ public class FXView extends Application implements ViewInterface {
 			System.out.println(usernum);
 			double perc = usernum / 30.0;
 
-			NumberBinding dx = Bindings.subtract(this.endXProperty(), this.startXProperty());
-			NumberBinding dy = Bindings.subtract(this.endYProperty(), this.startYProperty());
+			NumberBinding dx = Bindings.subtract(full.endXProperty(), full.startXProperty());
+			NumberBinding dy = Bindings.subtract(full.endYProperty(), full.startYProperty());
 
 			NumberBinding ax = Bindings.multiply(perc, dx);
 			NumberBinding ay = Bindings.multiply(perc, dy);
 
-			Line character = new Line();
-			character.setFill(Color.RED);
-			character.startXProperty().bind(this.startXProperty());
-			character.startYProperty().bind(this.startYProperty());
-			character.endXProperty().bind(Bindings.add(ax, this.startXProperty()));
-			character.endYProperty().bind(Bindings.add(ay, this.startYProperty()));
+			part.endXProperty().bind(Bindings.add(ax, full.startXProperty()));
+			part.endYProperty().bind(Bindings.add(ay, full.startYProperty()));
 
 		}
 	}
