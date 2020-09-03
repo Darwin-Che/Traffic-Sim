@@ -1,0 +1,12 @@
+
+
+
+#initBoxTitle{
+    -fx-font-size:18.0px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #115E7F;
+}
+
+.initBoxInput1{
+	-fx-pref-width:50px;
+}

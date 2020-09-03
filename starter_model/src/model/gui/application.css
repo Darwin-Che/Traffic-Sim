@@ -1,0 +1,17 @@
+
+#initBoxTitle{
+    -fx-font-size:32.0px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #115E7F;
+}
+
+
+.vertices{
+	-fx-background-radius: 1000;
+    -fx-min-width: 20.0px; 
+    -fx-min-height: 20.0px; 
+
+    -fx-background-color: lightyellow;
+    -fx-background-insets: 0.0px;
+    -fx-padding: 0.0px;
+}

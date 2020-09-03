@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.Text?>
+
+<GridPane id="initBoxPane" prefHeight="200" prefWidth="320"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="model.gui.FXController" alignment="CENTER" hgap="10"
+	vgap="10">
+
+	<padding>
+		<Insets top="25" right="25" bottom="25" left="25" />
+	</padding>
+
+
+	<HBox spacing="10" alignment="center" GridPane.columnIndex="0"
+		GridPane.rowIndex="0" GridPane.columnSpan="2">
+		<Text text="Size of New Map" fx:id="initBoxTitle" />
+	</HBox>
+
+	<HBox spacing="10" alignment="center_left" GridPane.columnIndex="0"
+		GridPane.rowIndex="2">
+		<Label text="Columns:" />
+	</HBox>
+
+	<HBox spacing="10" alignment="center" GridPane.columnIndex="1"
+		GridPane.rowIndex="2">
+		<TextField fx:id="initBoxInputColumn"
+			styleClass="initBoxInput1" />
+	</HBox>
+
+	<HBox spacing="10" alignment="center_left" GridPane.columnIndex="0"
+		GridPane.rowIndex="3">
+		<Label text="Rows:" />
+	</HBox>
+
+
+	<HBox spacing="0" alignment="center" GridPane.columnIndex="1"
+		GridPane.rowIndex="3">
+		<TextField fx:id="initBoxInputRow"
+			styleClass="initBoxInput1" />
+	</HBox>
+
+
+	<HBox spacing="10" alignment="center" GridPane.columnIndex="0"
+		GridPane.rowIndex="5" GridPane.columnSpan="2">
+		<Button text="Set up Map" onAction="#setUpMap" />
+	</HBox>
+
+	<Text fx:id="setUpStatus" GridPane.columnIndex="0"
+		GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+		GridPane.rowIndex="7" />
+</GridPane>
+
